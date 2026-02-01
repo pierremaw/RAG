@@ -1,5 +1,7 @@
 # RAG Assistant
 
+**[Live Demo](https://pautybqphujebmetcxuihx.streamlit.app/)**
+
 PDF question-answering system using Retrieval-Augmented Generation with a Streamlit web interface.
 
 Upload PDFs, ingest them into a vector database, and ask questions answered by Claude using relevant context from your documents.
@@ -60,10 +62,8 @@ python main.py query "What is this document about?"
 python main.py query
 ```
 
-## Deploy to Streamlit Community Cloud
+## Live Demo
 
-1. Push this repo to GitHub
-2. Go to https://share.streamlit.io
-3. Select your repo, branch `main`, file `app.py`
-4. Add your API keys under **Advanced settings > Secrets**
-5. Deploy
+The app is deployed on Streamlit Community Cloud:
+
+https://pautybqphujebmetcxuihx.streamlit.app/
