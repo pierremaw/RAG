@@ -3,12 +3,24 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
+def _get_secret(key, default=None):
+    """Get a secret from Streamlit secrets or environment variables."""
+    try:
+        import streamlit as st
+        if key in st.secrets:
+            return st.secrets[key]
+    except Exception:
+        pass
+    return os.getenv(key, default)
+
+
 # API Keys
-ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
-PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
+ANTHROPIC_API_KEY = _get_secret("ANTHROPIC_API_KEY")
+PINECONE_API_KEY = _get_secret("PINECONE_API_KEY")
 
 # Pinecone
-PINECONE_INDEX_NAME = os.getenv("PINECONE_INDEX_NAME", "rag-assistant")
+PINECONE_INDEX_NAME = _get_secret("PINECONE_INDEX_NAME", "rag-assistant")
 
 # Chunking
 CHUNK_SIZE = 1000
