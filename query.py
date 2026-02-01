@@ -25,7 +25,7 @@ class PineconeRetriever(BaseRetriever):
     top_k: int = 4
 
     def _get_relevant_documents(self, query: str):
-        pc = Pinecone(api_key=config.PINECONE_API_KEY)
+        pc = Pinecone(api_key=config.get_pinecone_key())
         index = pc.Index(self.index_name)
 
         # Embed the query using Pinecone inference
@@ -53,13 +53,13 @@ class PineconeRetriever(BaseRetriever):
 def build_chain():
     """Build the RetrievalQA chain with Pinecone retriever and Claude LLM."""
     retriever = PineconeRetriever(
-        index_name=config.PINECONE_INDEX_NAME,
+        index_name=config.get_index_name(),
         top_k=config.TOP_K,
     )
 
     llm = ChatAnthropic(
         model=config.LLM_MODEL,
-        anthropic_api_key=config.ANTHROPIC_API_KEY,
+        anthropic_api_key=config.get_anthropic_key(),
     )
 
     prompt = PromptTemplate(

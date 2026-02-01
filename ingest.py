@@ -30,19 +30,19 @@ def chunk_documents(documents):
 
 def ensure_index_exists():
     """Create the Pinecone index if it doesn't exist."""
-    pc = Pinecone(api_key=config.PINECONE_API_KEY)
+    pc = Pinecone(api_key=config.get_pinecone_key())
     existing = [idx.name for idx in pc.list_indexes()]
-    if config.PINECONE_INDEX_NAME not in existing:
-        print(f"Creating Pinecone index '{config.PINECONE_INDEX_NAME}'...")
+    if config.get_index_name() not in existing:
+        print(f"Creating Pinecone index '{config.get_index_name()}'...")
         pc.create_index(
-            name=config.PINECONE_INDEX_NAME,
+            name=config.get_index_name(),
             dimension=1024,  # multilingual-e5-large dimension
             metric="cosine",
             spec=ServerlessSpec(cloud="aws", region="us-east-1"),
         )
         print("Index created.")
     else:
-        print(f"Pinecone index '{config.PINECONE_INDEX_NAME}' already exists.")
+        print(f"Pinecone index '{config.get_index_name()}' already exists.")
 
 
 def embed_texts(pc, texts):
@@ -57,9 +57,9 @@ def embed_texts(pc, texts):
 
 def embed_and_store(chunks):
     """Embed chunks and upsert them into Pinecone."""
-    pc = Pinecone(api_key=config.PINECONE_API_KEY)
+    pc = Pinecone(api_key=config.get_pinecone_key())
     ensure_index_exists()
-    index = pc.Index(config.PINECONE_INDEX_NAME)
+    index = pc.Index(config.get_index_name())
 
     # Batch embed and upsert with rate limit handling
     batch_size = 50

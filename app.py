@@ -5,8 +5,35 @@ from query import ask
 
 st.set_page_config(page_title="RAG Assistant", page_icon="📚", layout="wide")
 
-# --- Sidebar: PDF Upload & Ingestion ---
+# --- Sidebar: API Keys ---
 with st.sidebar:
+    st.header("🔑 API Keys")
+    st.caption("Enter your own keys, or leave blank to use server defaults.")
+
+    anthropic_key = st.text_input(
+        "Anthropic API Key",
+        type="password",
+        placeholder="sk-ant-...",
+    )
+    pinecone_key = st.text_input(
+        "Pinecone API Key",
+        type="password",
+        placeholder="pcsk_...",
+    )
+    pinecone_index = st.text_input(
+        "Pinecone Index Name",
+        placeholder="rag-assistant",
+    )
+
+    # Store user-provided keys in session state for config.py to pick up
+    if anthropic_key:
+        st.session_state["ANTHROPIC_API_KEY"] = anthropic_key
+    if pinecone_key:
+        st.session_state["PINECONE_API_KEY"] = pinecone_key
+    if pinecone_index:
+        st.session_state["PINECONE_INDEX_NAME"] = pinecone_index
+
+    st.divider()
     st.header("📄 Document Ingestion")
 
     uploaded_files = st.file_uploader(

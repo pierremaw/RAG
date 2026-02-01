@@ -5,9 +5,12 @@ load_dotenv()
 
 
 def _get_secret(key, default=None):
-    """Get a secret from Streamlit secrets or environment variables."""
+    """Get a secret from session state, Streamlit secrets, or environment variables."""
     try:
         import streamlit as st
+        # User-provided key in session state takes priority
+        if key in st.session_state and st.session_state[key]:
+            return st.session_state[key]
         if key in st.secrets:
             return st.secrets[key]
     except Exception:
@@ -15,12 +18,16 @@ def _get_secret(key, default=None):
     return os.getenv(key, default)
 
 
-# API Keys
-ANTHROPIC_API_KEY = _get_secret("ANTHROPIC_API_KEY")
-PINECONE_API_KEY = _get_secret("PINECONE_API_KEY")
+def get_anthropic_key():
+    return _get_secret("ANTHROPIC_API_KEY")
 
-# Pinecone
-PINECONE_INDEX_NAME = _get_secret("PINECONE_INDEX_NAME", "rag-assistant")
+
+def get_pinecone_key():
+    return _get_secret("PINECONE_API_KEY")
+
+
+def get_index_name():
+    return _get_secret("PINECONE_INDEX_NAME", "rag-assistant")
 
 # Chunking
 CHUNK_SIZE = 1000
